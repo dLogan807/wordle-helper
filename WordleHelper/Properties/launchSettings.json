@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "WordleHelper (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "WordleHelper (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
