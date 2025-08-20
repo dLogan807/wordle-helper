@@ -7,8 +7,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     x:Name="WordleHelper"
     Title="WordleHelper"
-    Width="300"
-    Height="450"
+    Width="400"
+    Height="550"
     MinWidth="300"
     MinHeight="450"
     AllowsTransparency="True"
@@ -29,10 +29,27 @@
             Grid.Row="0"
             Content="{Binding TextTest, UpdateSourceTrigger=PropertyChanged}" />
         <TextBox
-            Width="200"
+            Width="206"
+            Height="34"
             Margin="10,37,0,0"
             HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            Text="{Binding TextTest, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            VerticalAlignment="Top" />
+        <Button
+            Margin="221,37,120,479"
+            Padding="5"
+            VerticalContentAlignment="Center"
+            Content="Add"
+            FontSize="12" />
+        <ListView x:Name="GuessList" Margin="10,86,184,150">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="40" Header="1" />
+                    <GridViewColumn Width="40" Header="2" />
+                    <GridViewColumn Width="40" Header="3" />
+                    <GridViewColumn Width="40" Header="4" />
+                    <GridViewColumn Width="40" Header="5" />
+                </GridView>
+            </ListView.View>
+        </ListView>
     </Grid>
 </Window>
