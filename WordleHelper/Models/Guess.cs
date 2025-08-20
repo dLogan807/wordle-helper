@@ -6,12 +6,25 @@ using System.Threading.Tasks;
 
 namespace WordleHelper.Models;
 
-internal class Guess
+public class Guess
 {
-    readonly Letter[] _letters = new Letter[5];
+    readonly Letter[] Letters = new Letter[5];
+    public readonly string GuessString;
 
-    public void SetLetter(Letter letter, int position)
+    public Guess(string word)
     {
-        _letters[position] = letter;
+        if (word.Length != 5)
+        {
+            throw new ArgumentException(word + " is not valid. Words must be 5 letters.");
+        }
+
+        this.GuessString = word;
+
+        char[] letters = this.GuessString.ToCharArray();
+
+        for (int i = 0; i < letters.Length; i++)
+        {
+            this.Letters[i] = new Letter(letters[i]);
+        }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WordleHelper.Models;
 
-internal enum LetterCorrectness
+public enum LetterCorrectness
 {
     Wrong,
     AdjustPostion,
