@@ -11,13 +11,13 @@
     Height="450"
     MinWidth="300"
     MinHeight="450"
-    d:DataContext="{d:DesignInstance Type=local:MainViewModel}"
     AllowsTransparency="True"
     Background="Transparent"
     ResizeMode="CanResizeWithGrip"
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"
     mc:Ignorable="d">
+
     <Grid>
         <Border
             Background="#282D33"
@@ -27,7 +27,7 @@
         <Label
             x:Name="Guess"
             Grid.Row="0"
-            Content="{Binding TextTest}" />
+            Content="{Binding TextTest, UpdateSourceTrigger=PropertyChanged}" />
         <TextBox
             Width="200"
             Margin="10,37,0,0"
