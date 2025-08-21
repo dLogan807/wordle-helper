@@ -8,19 +8,15 @@ namespace WordleHelper.Models;
 
 public class Guess
 {
-    private readonly Letter[] Letters = new Letter[5];
+    public Letter[] Letters { get; } = new Letter[5];
 
-    public Letter this[int i]
-    {
-        get => Letters[i];
-    }
     public string GuessString { get; }
 
     public Guess(string word)
     {
         if (word.Length != 5)
         {
-            throw new ArgumentException(word + " is not valid. Words must be 5 letters.");
+            throw new ArgumentException("\"" + word + "\" is not valid. Words must be 5 letters.");
         }
 
         GuessString = word;
