@@ -12,25 +12,17 @@ using WordleHelper.ViewModels;
 
 namespace WordleHelper.Commands;
 
-class RemoveGuessCommand : CommandBase
+class RemoveGuessCommand(MainViewModel mainViewModel) : CommandBase
 {
-    private MainViewModel _mainViewModel;
-
-    public RemoveGuessCommand(MainViewModel mainViewModel)
-    {
-        _mainViewModel = mainViewModel;
-    }
+    private readonly MainViewModel _mainViewModel = mainViewModel;
 
     public override void Execute(object? parameter)
     {
         if (parameter == null)
             return;
 
-        int index = _mainViewModel.Guesses.IndexOf((Guess)parameter);
+        Guess guess = (Guess)parameter;
 
-        if (index > -1 && index < _mainViewModel.Guesses.Count)
-        {
-            _mainViewModel.Guesses.RemoveAt(index);
-        }
+        _mainViewModel.Guesses.Remove(guess);
     }
 }
