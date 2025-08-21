@@ -56,7 +56,7 @@
       </Grid.Resources>
       <DataGrid
         x:Name="GuessDataGrid"
-        Margin="10,97,112,171"
+        Margin="10,97,44,171"
         AutoGenerateColumns="False"
         ItemsSource="{Binding Guesses}"
       >
