@@ -8,7 +8,7 @@ namespace WordleHelper.Models;
 
 public class Letter
 {
-    public char Value { get; set; }
+    public char Value { get; }
 
     public LetterCorrectness Correctness { get; set; }
 
@@ -40,19 +40,19 @@ public class Letter
 
     public LetterCorrectness CycleLetterCorrectness()
     {
-        switch (this.Correctness)
+        switch (Correctness)
         {
             case LetterCorrectness.Wrong:
-                this.Correctness = LetterCorrectness.AdjustPostion;
+                Correctness = LetterCorrectness.AdjustPostion;
                 break;
             case LetterCorrectness.AdjustPostion:
-                this.Correctness = LetterCorrectness.Correct;
+                Correctness = LetterCorrectness.Correct;
                 break;
             case LetterCorrectness.Correct:
-                this.Correctness = LetterCorrectness.Wrong;
+                Correctness = LetterCorrectness.Wrong;
                 break;
         }
 
-        return this.Correctness;
+        return Correctness;
     }
 }

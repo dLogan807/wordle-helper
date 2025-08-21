@@ -9,16 +9,16 @@ namespace WordleHelper.Models;
 
 public class GuessManager
 {
-    public ObservableCollection<Guess> Guesses = [];
+    public static ObservableCollection<Guess> Guesses { get; } = [];
 
     public void AddGuess(Guess guess)
     {
-        if (this.Guesses.Count > 6)
+        if (Guesses.Count > 6)
         {
             throw new InvalidOperationException(
                 "List of guesses is full ("
-                    + this.Guesses.Count
-                    + "). Cannot add guess \""
+                    + Guesses.Count
+                    + " guesses). Cannot add guess \""
                     + guess.GuessString
                     + "\"."
             );
@@ -29,10 +29,10 @@ public class GuessManager
 
     public void RemoveGuess(string guess)
     {
-        if (this.Guesses.Count == 0)
+        if (Guesses.Count == 0)
             return;
 
-        foreach (Guess thisGuess in this.Guesses)
+        foreach (Guess thisGuess in Guesses)
         {
             if (thisGuess.GuessString.Equals(guess))
             {
