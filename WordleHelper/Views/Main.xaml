@@ -1,0 +1,60 @@
+﻿<Window
+  x:Class="WordleHelper.Main"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:local="clr-namespace:WordleHelper"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  x:Name="WordleHelper"
+  Title="WordleHelper"
+  Width="400"
+  Height="550"
+  MinWidth="300"
+  MinHeight="450"
+  AllowsTransparency="True"
+  Background="Transparent"
+  ResizeMode="CanResizeWithGrip"
+  WindowStartupLocation="CenterScreen"
+  WindowStyle="None"
+  mc:Ignorable="d"
+>
+  <Grid>
+    <Border Background="#282D33" BorderBrush="#3A4149" BorderThickness="5" CornerRadius="8,8,0,8" />
+    <Label x:Name="Guess" Grid.Row="0" Content="Enter Guess" />
+    <TextBox
+      Width="206"
+      Height="34"
+      Margin="10,37,0,0"
+      HorizontalAlignment="Left"
+      VerticalAlignment="Top"
+      Text="{Binding TypedGuess, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+    />
+    <Button
+      Margin="221,37,120,479"
+      Padding="5"
+      VerticalContentAlignment="Center"
+      Command="{Binding AddGuessCommand}"
+      Content="Add"
+      FontSize="12"
+    />
+    <ListView x:Name="GuessList" Margin="10,86,184,150" ItemsSource="{Binding Guesses}">
+      <ListView.View>
+        <GridView>
+          <GridViewColumn Width="40" DisplayMemberBinding="{Binding Letters[0].Value}" Header="1" />
+          <GridViewColumn Width="40" DisplayMemberBinding="{Binding Letters[1].Value}" Header="2" />
+          <GridViewColumn Width="40" DisplayMemberBinding="{Binding Letters[2].Value}" Header="3" />
+          <GridViewColumn Width="40" DisplayMemberBinding="{Binding Letters[3].Value}" Header="4" />
+          <GridViewColumn Width="40" DisplayMemberBinding="{Binding Letters[4].Value}" Header="5" />
+        </GridView>
+      </ListView.View>
+    </ListView>
+    <Button
+      Margin="18,493,287,24"
+      Padding="5"
+      VerticalContentAlignment="Center"
+      Command="{Binding ShowWindowCommand}"
+      Content="Show Window"
+      FontSize="12"
+    />
+  </Grid>
+</Window>

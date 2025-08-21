@@ -8,21 +8,17 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WordleHelper.ViewModel;
 
 namespace WordleHelper;
 
-public partial class MainWindow : Window
+public partial class Main : Window
 {
-    private readonly MainWindowViewModel mainWindowViewModel = new();
+    private readonly MainViewModel mainViewModel = new();
 
-    public MainWindow()
+    public Main()
     {
         InitializeComponent();
-        DataContext = mainWindowViewModel;
+        DataContext = mainViewModel;
     }
-}
-
-public sealed class MainWindowViewModel
-{
-    public string TextTest { get; set; } = "WordleHelper!";
 }
