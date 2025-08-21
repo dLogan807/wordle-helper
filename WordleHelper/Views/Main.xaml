@@ -5,12 +5,14 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:local="clr-namespace:WordleHelper"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:viewmodels="clr-namespace:WordleHelper.ViewModels"
   x:Name="WordleHelper"
   Title="WordleHelper"
   Width="400"
   Height="550"
   MinWidth="300"
   MinHeight="450"
+  d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
   AllowsTransparency="True"
   Background="Transparent"
   ResizeMode="CanResizeWithGrip"
@@ -27,8 +29,13 @@
       Margin="10,37,0,0"
       HorizontalAlignment="Left"
       VerticalAlignment="Top"
-      Text="{Binding TypedGuess, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-    />
+      FontSize="12"
+      Text="{Binding TypedGuess, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"
+    >
+      <TextBox.InputBindings>
+        <KeyBinding Key="Return" Command="{Binding AddGuessCommand}" />
+      </TextBox.InputBindings>
+    </TextBox>
     <Button
       Margin="221,37,120,479"
       Padding="5"
@@ -37,17 +44,32 @@
       Content="Add"
       FontSize="12"
     />
-    <ListView x:Name="GuessList" Margin="10,86,184,150" ItemsSource="{Binding Guesses}">
-      <ListView.View>
-        <GridView>
-          <GridViewColumn Width="40" DisplayMemberBinding="{Binding Letters[0].Value}" Header="1" />
-          <GridViewColumn Width="40" DisplayMemberBinding="{Binding Letters[1].Value}" Header="2" />
-          <GridViewColumn Width="40" DisplayMemberBinding="{Binding Letters[2].Value}" Header="3" />
-          <GridViewColumn Width="40" DisplayMemberBinding="{Binding Letters[3].Value}" Header="4" />
-          <GridViewColumn Width="40" DisplayMemberBinding="{Binding Letters[4].Value}" Header="5" />
-        </GridView>
-      </ListView.View>
-    </ListView>
+    <Grid>
+      <Grid.Resources>
+        <DataTemplate x:Key="DeleteButtonTemplate">
+          <Button
+            Command="{Binding Path=DataContext.RemoveGuessCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+            CommandParameter="{Binding}"
+            Content="Remove"
+          />
+        </DataTemplate>
+      </Grid.Resources>
+      <DataGrid
+        x:Name="GuessDataGrid"
+        Margin="10,97,112,171"
+        AutoGenerateColumns="False"
+        ItemsSource="{Binding Guesses}"
+      >
+        <DataGrid.Columns>
+          <DataGridTextColumn Width="40" Binding="{Binding Letters[0].Value}" IsReadOnly="True" />
+          <DataGridTextColumn Width="40" Binding="{Binding Letters[1].Value}" IsReadOnly="True" />
+          <DataGridTextColumn Width="40" Binding="{Binding Letters[2].Value}" IsReadOnly="True" />
+          <DataGridTextColumn Width="40" Binding="{Binding Letters[3].Value}" IsReadOnly="True" />
+          <DataGridTextColumn Width="40" Binding="{Binding Letters[4].Value}" IsReadOnly="True" />
+          <DataGridTemplateColumn CellTemplate="{StaticResource DeleteButtonTemplate}" />
+        </DataGrid.Columns>
+      </DataGrid>
+    </Grid>
     <Button
       Margin="18,493,287,24"
       Padding="5"
