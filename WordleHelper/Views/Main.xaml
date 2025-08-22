@@ -10,41 +10,17 @@
   Title="WordleHelper"
   Width="400"
   Height="550"
-  MinWidth="300"
-  MinHeight="450"
   d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
-  AllowsTransparency="True"
-  Background="Transparent"
-  ResizeMode="CanResizeWithGrip"
   WindowStartupLocation="CenterScreen"
-  WindowStyle="None"
   mc:Ignorable="d"
 >
   <Grid>
-    <Border Background="#282D33" BorderBrush="#3A4149" BorderThickness="5" CornerRadius="8,8,0,8" />
-    <Label x:Name="Guess" Grid.Row="0" Content="Enter Guess" />
-    <TextBox
-      Width="206"
-      Height="34"
-      Margin="10,37,0,0"
-      HorizontalAlignment="Left"
-      VerticalAlignment="Top"
-      FontSize="12"
-      Text="{Binding TypedGuess, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"
-    >
-      <TextBox.InputBindings>
-        <KeyBinding Key="Return" Command="{Binding AddGuessCommand}" />
-      </TextBox.InputBindings>
-    </TextBox>
-    <Button
-      Margin="221,37,120,479"
-      Padding="5"
-      VerticalContentAlignment="Center"
-      Command="{Binding AddGuessCommand}"
-      Content="Add"
-      FontSize="12"
-    />
-    <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="93*" />
+      <ColumnDefinition Width="7*" />
+    </Grid.ColumnDefinitions>
+    <Border Grid.ColumnSpan="2" Background="#282D33" BorderBrush="#3A4149" BorderThickness="5" />
+    <Grid Grid.ColumnSpan="2">
       <Grid.Resources>
         <DataTemplate x:Key="DeleteButtonTemplate">
           <Button
@@ -54,25 +30,60 @@
           />
         </DataTemplate>
       </Grid.Resources>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="67*" />
+        <ColumnDefinition Width="13*" />
+      </Grid.ColumnDefinitions>
       <DataGrid
         x:Name="GuessDataGrid"
-        Margin="10,97,44,171"
+        Margin="10,77,64,188"
         AutoGenerateColumns="False"
+        GridLinesVisibility="None"
+        HeadersVisibility="None"
         ItemsSource="{Binding Guesses}"
       >
         <DataGrid.Columns>
-          <DataGridTextColumn Width="40" Binding="{Binding Letters[0].Value}" IsReadOnly="True" />
-          <DataGridTextColumn Width="40" Binding="{Binding Letters[1].Value}" IsReadOnly="True" />
-          <DataGridTextColumn Width="40" Binding="{Binding Letters[2].Value}" IsReadOnly="True" />
-          <DataGridTextColumn Width="40" Binding="{Binding Letters[3].Value}" IsReadOnly="True" />
-          <DataGridTextColumn Width="40" Binding="{Binding Letters[4].Value}" IsReadOnly="True" />
+          <DataGridTextColumn Width="30" Binding="{Binding Letters[0].Value}" IsReadOnly="True" />
+          <DataGridTextColumn Width="30" Binding="{Binding Letters[1].Value}" IsReadOnly="True" />
+          <DataGridTextColumn Width="30" Binding="{Binding Letters[2].Value}" IsReadOnly="True" />
+          <DataGridTextColumn Width="30" Binding="{Binding Letters[3].Value}" IsReadOnly="True" />
+          <DataGridTextColumn Width="30" Binding="{Binding Letters[4].Value}" IsReadOnly="True" />
           <DataGridTemplateColumn CellTemplate="{StaticResource DeleteButtonTemplate}" />
         </DataGrid.Columns>
       </DataGrid>
+      <Button
+        MinWidth="66"
+        MinHeight="34"
+        Margin="161,38,0,0"
+        Padding="5"
+        HorizontalAlignment="Left"
+        VerticalAlignment="Top"
+        VerticalContentAlignment="Center"
+        Command="{Binding AddGuessCommand}"
+        Content="Add"
+        FontSize="12"
+      />
+      <TextBox
+        Width="138"
+        Height="34"
+        Margin="10,38,0,0"
+        HorizontalAlignment="Left"
+        VerticalAlignment="Top"
+        FontSize="12"
+        Text="{Binding TypedGuess, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+      >
+        <TextBox.InputBindings>
+          <KeyBinding Key="Return" Command="{Binding AddGuessCommand}" />
+        </TextBox.InputBindings>
+      </TextBox>
     </Grid>
     <Button
-      Margin="18,493,287,24"
+      MinWidth="105"
+      MinHeight="34"
+      Margin="18,477,0,0"
       Padding="5"
+      HorizontalAlignment="Left"
+      VerticalAlignment="Top"
       VerticalContentAlignment="Center"
       Command="{Binding ShowWindowCommand}"
       Content="Show Window"

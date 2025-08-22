@@ -5,5 +5,11 @@
   xmlns:local="clr-namespace:WordleHelper"
   StartupUri="Views/Main.xaml"
 >
-  <Application.Resources />
+  <Application.Resources>
+    <ResourceDictionary>
+      <Style TargetType="DataGridCell">
+        <Setter Property="TextBlock.TextAlignment" Value="Center" />
+      </Style>
+    </ResourceDictionary>
+  </Application.Resources>
 </Application>
