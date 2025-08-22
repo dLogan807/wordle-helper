@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -20,6 +21,7 @@ class AddGuessCommand : CommandBase
         _mainViewModel = mainViewModel;
 
         _mainViewModel.PropertyChanged += OnViewModelPropertyChanged;
+        _mainViewModel.Guesses.CollectionChanged += OnViewModelGuessesChanged;
     }
 
     public override bool CanExecute(object? parameter)
@@ -47,10 +49,12 @@ class AddGuessCommand : CommandBase
         return true;
     }
 
+    //Add guess to collection and clear field
     public override void Execute(object? parameter)
     {
         Guess guess = new(_mainViewModel.TypedGuess);
         _mainViewModel.Guesses.Add(guess);
+        _mainViewModel.TypedGuess = "";
         OnCanExecuteChanged();
     }
 
@@ -60,5 +64,10 @@ class AddGuessCommand : CommandBase
         {
             OnCanExecuteChanged();
         }
+    }
+
+    private void OnViewModelGuessesChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        OnCanExecuteChanged();
     }
 }
