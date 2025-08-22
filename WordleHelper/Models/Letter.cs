@@ -17,7 +17,7 @@ public class Letter
         ValidateIsAlphabetical(value);
 
         Value = char.ToUpper(value);
-        Correctness = LetterCorrectness.Wrong;
+        Correctness = LetterCorrectness.NotPresent;
     }
 
     public Letter(char value, LetterCorrectness correctness)
@@ -33,7 +33,8 @@ public class Letter
         if (!char.IsLetter(letter))
         {
             throw new ArgumentException(
-                letter + " is not a letter. Acceptable chars include a-z and A-Z."
+                $"{
+                letter} is not a letter. Acceptable chars include a-z and A-Z."
             );
         }
     }
@@ -42,14 +43,14 @@ public class Letter
     {
         switch (Correctness)
         {
-            case LetterCorrectness.Wrong:
+            case LetterCorrectness.NotPresent:
                 Correctness = LetterCorrectness.AdjustPostion;
                 break;
             case LetterCorrectness.AdjustPostion:
                 Correctness = LetterCorrectness.Correct;
                 break;
             case LetterCorrectness.Correct:
-                Correctness = LetterCorrectness.Wrong;
+                Correctness = LetterCorrectness.NotPresent;
                 break;
         }
 

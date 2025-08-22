@@ -16,7 +16,7 @@ public class Guess
     {
         if (word.Length != 5)
         {
-            throw new ArgumentException("\"" + word + "\" is not valid. Words must be 5 letters.");
+            throw new ArgumentException($"\"{word}\" is not valid. Words must be 5 letters.");
         }
 
         GuessString = word;

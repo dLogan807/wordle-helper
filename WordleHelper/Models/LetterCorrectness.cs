@@ -8,7 +8,7 @@ namespace WordleHelper.Models;
 
 public enum LetterCorrectness
 {
-    Wrong,
+    NotPresent,
     AdjustPostion,
     Correct,
 }
