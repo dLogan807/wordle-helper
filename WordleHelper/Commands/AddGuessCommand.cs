@@ -53,7 +53,7 @@ class AddGuessCommand : CommandBase
     public override void Execute(object? parameter)
     {
         Guess guess = new(_mainViewModel.TypedGuess);
-        _mainViewModel.Guesses.Add(guess);
+        _mainViewModel.Guesses.Insert(0, guess);
         _mainViewModel.TypedGuess = "";
         OnCanExecuteChanged();
     }

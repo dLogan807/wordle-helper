@@ -39,6 +39,8 @@ public class MainViewModel : ViewModelBase
 
     public ICommand RemoveGuessCommand { get; set; }
 
+    public ICommand CycleLetterCommand { get; set; }
+
     public MainViewModel()
     {
         Guesses = [];
@@ -48,6 +50,8 @@ public class MainViewModel : ViewModelBase
         AddGuessCommand = new AddGuessCommand(this);
 
         RemoveGuessCommand = new RemoveGuessCommand(this);
+
+        CycleLetterCommand = new CycleLetterCommand();
 
         WordManager = new WordManager();
     }

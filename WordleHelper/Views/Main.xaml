@@ -29,6 +29,47 @@
             Content="Remove"
           />
         </DataTemplate>
+        <DataTemplate x:Key="Letter0ButtonTemplate">
+          <Button
+            Width="30"
+            Command="{Binding Path=DataContext.CycleLetterCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+            CommandParameter="{Binding Letters[0]}"
+            Content="{Binding Letters[0].Value}"
+          />
+        </DataTemplate>
+        <DataTemplate x:Key="Letter1ButtonTemplate">
+          <Button
+            Width="30"
+            Command="{Binding Path=DataContext.CycleLetterCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+            CommandParameter="{Binding Letters[1]}"
+            Content="{Binding Letters[1].Value}"
+          />
+        </DataTemplate>
+        <DataTemplate x:Key="Letter2ButtonTemplate">
+          <Button
+            Width="30"
+            Command="{Binding Path=DataContext.CycleLetterCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+            CommandParameter="{Binding Letters[2]}"
+            Content="{Binding Letters[2].Value}"
+          />
+        </DataTemplate>
+        <DataTemplate x:Key="Letter3ButtonTemplate">
+          <Button
+            Width="30"
+            Command="{Binding Path=DataContext.CycleLetterCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+            CommandParameter="{Binding Letters[3]}"
+            Content="{Binding Letters[3].Value}"
+          />
+        </DataTemplate>
+        <DataTemplate x:Key="Letter4ButtonTemplate">
+          <Button
+            Width="30"
+            Background="AliceBlue"
+            Command="{Binding Path=DataContext.CycleLetterCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+            CommandParameter="{Binding Letters[4]}"
+            Content="{Binding Letters[4].Value}"
+          />
+        </DataTemplate>
       </Grid.Resources>
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="67*" />
@@ -43,11 +84,11 @@
         ItemsSource="{Binding Guesses}"
       >
         <DataGrid.Columns>
-          <DataGridTextColumn Width="30" Binding="{Binding Letters[0].Value}" IsReadOnly="True" />
-          <DataGridTextColumn Width="30" Binding="{Binding Letters[1].Value}" IsReadOnly="True" />
-          <DataGridTextColumn Width="30" Binding="{Binding Letters[2].Value}" IsReadOnly="True" />
-          <DataGridTextColumn Width="30" Binding="{Binding Letters[3].Value}" IsReadOnly="True" />
-          <DataGridTextColumn Width="30" Binding="{Binding Letters[4].Value}" IsReadOnly="True" />
+          <DataGridTemplateColumn CellTemplate="{StaticResource Letter0ButtonTemplate}" />
+          <DataGridTemplateColumn CellTemplate="{StaticResource Letter1ButtonTemplate}" />
+          <DataGridTemplateColumn CellTemplate="{StaticResource Letter2ButtonTemplate}" />
+          <DataGridTemplateColumn CellTemplate="{StaticResource Letter3ButtonTemplate}" />
+          <DataGridTemplateColumn CellTemplate="{StaticResource Letter4ButtonTemplate}" />
           <DataGridTemplateColumn CellTemplate="{StaticResource DeleteButtonTemplate}" />
         </DataGrid.Columns>
       </DataGrid>
