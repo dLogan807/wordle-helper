@@ -11,7 +11,6 @@ using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using WordleHelper.Commands;
 using WordleHelper.Models;
-using WordleHelper.Views;
 
 namespace WordleHelper.ViewModels;
 
@@ -33,8 +32,6 @@ public class MainViewModel : ViewModelBase
 
     public ObservableCollection<Guess> Guesses { get; set; }
 
-    public CommandBase ShowWindowCommand { get; set; }
-
     public CommandBase AddGuessCommand { get; set; }
 
     public CommandBase RemoveGuessCommand { get; set; }
@@ -44,8 +41,6 @@ public class MainViewModel : ViewModelBase
     public MainViewModel()
     {
         Guesses = [];
-
-        ShowWindowCommand = new ShowWindowCommand();
 
         AddGuessCommand = new AddGuessCommand(this);
 
