@@ -33,13 +33,13 @@ public class MainViewModel : ViewModelBase
 
     public ObservableCollection<Guess> Guesses { get; set; }
 
-    public ICommand ShowWindowCommand { get; set; }
+    public CommandBase ShowWindowCommand { get; set; }
 
-    public ICommand AddGuessCommand { get; set; }
+    public CommandBase AddGuessCommand { get; set; }
 
-    public ICommand RemoveGuessCommand { get; set; }
+    public CommandBase RemoveGuessCommand { get; set; }
 
-    public ICommand CycleLetterCommand { get; set; }
+    public CommandBase CycleLetterCommand { get; set; }
 
     public MainViewModel()
     {

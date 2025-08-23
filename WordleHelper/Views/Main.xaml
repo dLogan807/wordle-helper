@@ -2,6 +2,7 @@
   x:Class="WordleHelper.Main"
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:converters="clr-namespace:WordleHelper.Converters"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:local="clr-namespace:WordleHelper"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -14,6 +15,9 @@
   WindowStartupLocation="CenterScreen"
   mc:Ignorable="d"
 >
+  <Window.Resources>
+    <converters:LetterColorConverter x:Key="letterColorConverter" />
+  </Window.Resources>
   <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="93*" />
@@ -22,16 +26,10 @@
     <Border Grid.ColumnSpan="2" Background="#282D33" BorderBrush="#3A4149" BorderThickness="5" />
     <Grid Grid.ColumnSpan="2">
       <Grid.Resources>
-        <DataTemplate x:Key="DeleteButtonTemplate">
-          <Button
-            Command="{Binding Path=DataContext.RemoveGuessCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
-            CommandParameter="{Binding}"
-            Content="Remove"
-          />
-        </DataTemplate>
         <DataTemplate x:Key="Letter0ButtonTemplate">
           <Button
             Width="30"
+            Background="{Binding Path=Letters[0].Correctness, Converter={StaticResource letterColorConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}"
             Command="{Binding Path=DataContext.CycleLetterCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
             CommandParameter="{Binding Letters[0]}"
             Content="{Binding Letters[0].Value}"
@@ -40,6 +38,7 @@
         <DataTemplate x:Key="Letter1ButtonTemplate">
           <Button
             Width="30"
+            Background="{Binding Path=Letters[1].Correctness, Converter={StaticResource letterColorConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}"
             Command="{Binding Path=DataContext.CycleLetterCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
             CommandParameter="{Binding Letters[1]}"
             Content="{Binding Letters[1].Value}"
@@ -48,6 +47,7 @@
         <DataTemplate x:Key="Letter2ButtonTemplate">
           <Button
             Width="30"
+            Background="{Binding Path=Letters[2].Correctness, Converter={StaticResource letterColorConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}"
             Command="{Binding Path=DataContext.CycleLetterCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
             CommandParameter="{Binding Letters[2]}"
             Content="{Binding Letters[2].Value}"
@@ -56,6 +56,7 @@
         <DataTemplate x:Key="Letter3ButtonTemplate">
           <Button
             Width="30"
+            Background="{Binding Path=Letters[3].Correctness, Converter={StaticResource letterColorConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}"
             Command="{Binding Path=DataContext.CycleLetterCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
             CommandParameter="{Binding Letters[3]}"
             Content="{Binding Letters[3].Value}"
@@ -64,10 +65,17 @@
         <DataTemplate x:Key="Letter4ButtonTemplate">
           <Button
             Width="30"
-            Background="AliceBlue"
+            Background="{Binding Path=Letters[4].Correctness, Converter={StaticResource letterColorConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}"
             Command="{Binding Path=DataContext.CycleLetterCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
             CommandParameter="{Binding Letters[4]}"
             Content="{Binding Letters[4].Value}"
+          />
+        </DataTemplate>
+        <DataTemplate x:Key="DeleteButtonTemplate">
+          <Button
+            Command="{Binding Path=DataContext.RemoveGuessCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+            CommandParameter="{Binding}"
+            Content="Remove"
           />
         </DataTemplate>
       </Grid.Resources>

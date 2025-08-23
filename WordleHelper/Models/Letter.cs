@@ -1,16 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace WordleHelper.Models;
 
-public class Letter
+public class Letter : INotifyPropertyChanged
 {
     public char Value { get; }
 
-    public LetterCorrectness Correctness { get; set; }
+    LetterCorrectness _correctness;
+
+    public LetterCorrectness Correctness
+    {
+        get => _correctness;
+        set
+        {
+            _correctness = value;
+            NotifyPropertyChanged(nameof(Correctness));
+        }
+    }
 
     public Letter(char value)
     {
@@ -27,6 +39,8 @@ public class Letter
         Value = value;
         Correctness = correctness;
     }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
 
     private static void ValidateIsAlphabetical(char letter)
     {
@@ -54,6 +68,13 @@ public class Letter
                 break;
         }
 
+        NotifyPropertyChanged(nameof(Correctness));
+
         return Correctness;
+    }
+
+    public void NotifyPropertyChanged(string propName)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
     }
 }
