@@ -12,6 +12,10 @@ namespace WordleHelper.Converters;
 
 class LetterColorConverter : IValueConverter
 {
+    private readonly string _gray = "#3a3a3c";
+    private readonly string _yellow = "#b59f3b";
+    private readonly string _green = "#538d4e";
+
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
         if (value is not LetterCorrectness)
@@ -20,11 +24,11 @@ class LetterColorConverter : IValueConverter
         LetterCorrectness letterCorrectness = (LetterCorrectness)value;
 
         if (letterCorrectness == LetterCorrectness.NotPresent)
-            return "Gray";
+            return _gray;
         else if (letterCorrectness == LetterCorrectness.AdjustPostion)
-            return "Yellow";
+            return _yellow;
 
-        return "Green";
+        return _green;
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -34,9 +38,9 @@ class LetterColorConverter : IValueConverter
 
         string letterColor = (string)value;
 
-        if (letterColor.Equals("Gray"))
+        if (letterColor.Equals(_gray))
             return LetterCorrectness.NotPresent;
-        else if (letterColor.Equals("Yellow"))
+        else if (letterColor.Equals(_yellow))
             return LetterCorrectness.AdjustPostion;
 
         return LetterCorrectness.Correct;
