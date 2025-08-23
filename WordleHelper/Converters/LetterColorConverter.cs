@@ -29,6 +29,16 @@ class LetterColorConverter : IValueConverter
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        throw new NotImplementedException();
+        if (value is not string)
+            throw new ArgumentException($"value not of type string");
+
+        string letterColor = (string)value;
+
+        if (letterColor.Equals("Gray"))
+            return LetterCorrectness.NotPresent;
+        else if (letterColor.Equals("Yellow"))
+            return LetterCorrectness.AdjustPostion;
+
+        return LetterCorrectness.Correct;
     }
 }
