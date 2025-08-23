@@ -35,6 +35,7 @@ class AddGuessCommand : CommandBase
             string.IsNullOrEmpty(_mainViewModel.TypedGuess)
             || _mainViewModel.TypedGuess.Length != 5
             || _mainViewModel.Guesses.Count > 5
+            || _mainViewModel.Guesses.Contains(new Guess(_mainViewModel.TypedGuess))
         )
             return false;
 
@@ -53,8 +54,10 @@ class AddGuessCommand : CommandBase
     public override void Execute(object? parameter)
     {
         Guess guess = new(_mainViewModel.TypedGuess);
-        _mainViewModel.Guesses.Insert(0, guess);
+
+        _mainViewModel.Guesses.Add(guess);
         _mainViewModel.TypedGuess = "";
+
         OnCanExecuteChanged();
     }
 

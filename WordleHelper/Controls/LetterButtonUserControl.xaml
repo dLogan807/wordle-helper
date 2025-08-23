@@ -6,7 +6,9 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:local="clr-namespace:WordleHelper.Controls"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:models="clr-namespace:WordleHelper.Models"
   x:Name="parent"
+  d:DataContext="{d:DesignInstance Type=models:Letter}"
   d:DesignHeight="30"
   d:DesignWidth="30"
   mc:Ignorable="d"
@@ -48,7 +50,7 @@
     <Button
       Width="30"
       Height="30"
-      Command="{Binding Path=DataContext.CycleLetterCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+      Command="{Binding Path=DataContext.CycleLetterCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
       CommandParameter="{Binding Path=Letter}"
       Content="{Binding Path=Letter.Value}"
       Style="{StaticResource MyButtonStyle}"

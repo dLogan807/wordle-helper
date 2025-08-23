@@ -46,64 +46,26 @@
           Content="Add"
         />
       </DockPanel>
-      <DataGrid
-        x:Name="GuessDataGrid"
-        Grid.Row="1"
-        Grid.Column="0"
-        Margin="0,10"
-        VerticalAlignment="Top"
-        AutoGenerateColumns="False"
-        Background="#121213"
-        BorderThickness="0"
-        GridLinesVisibility="None"
-        HeadersVisibility="None"
-        ItemsSource="{Binding Guesses}"
-      >
-        <DataGrid.RowStyle>
-          <Style TargetType="DataGridRow">
-            <Setter Property="Background" Value="#121213" />
-          </Style>
-        </DataGrid.RowStyle>
-        <DataGrid.CellStyle>
-          <Style TargetType="DataGridCell">
-            <Setter Property="BorderThickness" Value="3,5" />
-            <Setter Property="Background" Value="#121213" />
-          </Style>
-        </DataGrid.CellStyle>
-        <DataGrid.Resources>
-          <DataTemplate x:Key="Letter0ButtonTemplate">
-            <controls:LetterButtonUserControl Letter="{Binding Letters[0]}" />
+      <ItemsControl Grid.Row="1" Grid.Column="0" Margin="0,10" ItemsSource="{Binding Guesses}">
+        <ItemsControl.ItemTemplate>
+          <DataTemplate>
+            <DockPanel>
+              <controls:LetterButtonUserControl Letter="{Binding Letters[0]}" />
+              <controls:LetterButtonUserControl Letter="{Binding Letters[1]}" />
+              <controls:LetterButtonUserControl Letter="{Binding Letters[2]}" />
+              <controls:LetterButtonUserControl Letter="{Binding Letters[3]}" />
+              <controls:LetterButtonUserControl Letter="{Binding Letters[4]}" />
+              <Button
+                Width="50"
+                Height="20"
+                Command="{Binding Path=DataContext.RemoveGuessCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                CommandParameter="{Binding}"
+                Content="Remove"
+              />
+            </DockPanel>
           </DataTemplate>
-          <DataTemplate x:Key="Letter1ButtonTemplate">
-            <controls:LetterButtonUserControl Letter="{Binding Letters[1]}" />
-          </DataTemplate>
-          <DataTemplate x:Key="Letter2ButtonTemplate">
-            <controls:LetterButtonUserControl Letter="{Binding Letters[2]}" />
-          </DataTemplate>
-          <DataTemplate x:Key="Letter3ButtonTemplate">
-            <controls:LetterButtonUserControl Letter="{Binding Letters[3]}" />
-          </DataTemplate>
-          <DataTemplate x:Key="Letter4ButtonTemplate">
-            <controls:LetterButtonUserControl Letter="{Binding Letters[4]}" />
-          </DataTemplate>
-          <DataTemplate x:Key="DeleteButtonTemplate">
-            <Button
-              Height="20"
-              Command="{Binding Path=DataContext.RemoveGuessCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
-              CommandParameter="{Binding}"
-              Content="Remove"
-            />
-          </DataTemplate>
-        </DataGrid.Resources>
-        <DataGrid.Columns>
-          <DataGridTemplateColumn CellTemplate="{StaticResource Letter0ButtonTemplate}" />
-          <DataGridTemplateColumn CellTemplate="{StaticResource Letter1ButtonTemplate}" />
-          <DataGridTemplateColumn CellTemplate="{StaticResource Letter2ButtonTemplate}" />
-          <DataGridTemplateColumn CellTemplate="{StaticResource Letter3ButtonTemplate}" />
-          <DataGridTemplateColumn CellTemplate="{StaticResource Letter4ButtonTemplate}" />
-          <DataGridTemplateColumn CellTemplate="{StaticResource DeleteButtonTemplate}" />
-        </DataGrid.Columns>
-      </DataGrid>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
     </Grid>
   </Grid>
 </Window>
