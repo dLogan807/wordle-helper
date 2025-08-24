@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace WordleHelper.Models;
 
-public class Letter : INotifyPropertyChanged
+public class Letter : INotifyPropertyChanged, IEquatable<Letter>
 {
     public char Value { get; }
 
@@ -76,5 +76,24 @@ public class Letter : INotifyPropertyChanged
     public void NotifyPropertyChanged(string propName)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
+    }
+
+    public bool Equals(Letter? other)
+    {
+        ArgumentNullException.ThrowIfNull(other);
+
+        return other.Value.Equals(Value);
+    }
+
+    public override bool Equals(object? obj)
+    {
+        ArgumentNullException.ThrowIfNull(obj);
+
+        return obj is Letter letter && Equals(letter);
+    }
+
+    public override int GetHashCode()
+    {
+        return Value.GetHashCode();
     }
 }
