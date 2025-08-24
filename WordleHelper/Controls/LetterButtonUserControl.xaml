@@ -15,7 +15,7 @@
 >
   <UserControl.Resources>
     <converters:LetterColorConverter x:Key="letterColorConverter" />
-    <Style x:Key="MyButtonStyle" TargetType="Button">
+    <Style x:Key="letterButtonStyle" TargetType="Button">
       <Setter Property="OverridesDefaultStyle" Value="True" />
       <Setter
         Property="Background"
@@ -44,15 +44,50 @@
         </Setter.Value>
       </Setter>
     </Style>
+    <Storyboard x:Key="letterButtonShowStoryboard">
+      <DoubleAnimation
+        Storyboard.TargetName="letterButtonScaleTransform"
+        Storyboard.TargetProperty="(ScaleTransform.ScaleY)"
+        To="1"
+        Duration="0:0:0.2"
+      >
+        <DoubleAnimation.EasingFunction>
+          <SineEase EasingMode="EaseOut" />
+        </DoubleAnimation.EasingFunction>
+      </DoubleAnimation>
+    </Storyboard>
   </UserControl.Resources>
   <Grid x:Name="LayoutRoot" DataContext="{Binding ElementName=parent}">
     <Button
+      x:Name="LetterButton"
       Width="30"
       Height="30"
-      Command="{Binding Path=DataContext.CycleLetterCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
       CommandParameter="{Binding Path=Letter}"
       Content="{Binding Path=Letter.Value}"
-      Style="{StaticResource MyButtonStyle}"
-    />
+      Style="{StaticResource letterButtonStyle}"
+    >
+      <Button.RenderTransform>
+        <ScaleTransform x:Name="letterButtonScaleTransform" CenterY="15" ScaleX="1" ScaleY="1" />
+      </Button.RenderTransform>
+      <Button.Triggers>
+        <EventTrigger RoutedEvent="Button.Click">
+          <BeginStoryboard x:Name="LetterButtonHideStoryboard">
+            <Storyboard>
+              <DoubleAnimation
+                Completed="LetterHideAnim_Completed"
+                Storyboard.TargetName="letterButtonScaleTransform"
+                Storyboard.TargetProperty="(ScaleTransform.ScaleY)"
+                To="0"
+                Duration="0:0:0.2"
+              >
+                <DoubleAnimation.EasingFunction>
+                  <SineEase EasingMode="EaseIn" />
+                </DoubleAnimation.EasingFunction>
+              </DoubleAnimation>
+            </Storyboard>
+          </BeginStoryboard>
+        </EventTrigger>
+      </Button.Triggers>
+    </Button>
   </Grid>
 </UserControl>

@@ -9,6 +9,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -24,6 +25,8 @@ public partial class LetterButtonUserControl : UserControl
         set { SetValue(LetterProperty, value); }
     }
 
+    private readonly Storyboard _showLetterStoryboard;
+
     public static readonly DependencyProperty LetterProperty = DependencyProperty.Register(
         "Letter",
         typeof(Letter),
@@ -34,5 +37,12 @@ public partial class LetterButtonUserControl : UserControl
     public LetterButtonUserControl()
     {
         InitializeComponent();
+        _showLetterStoryboard = (Storyboard)FindResource("letterButtonShowStoryboard");
+    }
+
+    private void LetterHideAnim_Completed(object sender, EventArgs e)
+    {
+        Letter.CycleLetterCorrectness();
+        _showLetterStoryboard.Begin();
     }
 }

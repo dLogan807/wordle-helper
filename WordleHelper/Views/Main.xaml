@@ -60,15 +60,18 @@
                 Width="50"
                 Height="20"
                 HorizontalAlignment="Right"
+                Background="Red"
                 Command="{Binding Path=DataContext.RemoveGuessCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                 CommandParameter="{Binding}"
                 Content="Remove"
+                Foreground="White"
               />
             </DockPanel>
           </DataTemplate>
         </ItemsControl.ItemTemplate>
       </ItemsControl>
-      <Label Grid.Column="1" Content="Results" FontSize="16" FontWeight="Bold" Foreground="White" />
+      <Button Grid.Column="1" Content="Get Results" />
+      <ListView Grid.Row="1" Grid.Column="1" Background="#232323" />
     </Grid>
   </Grid>
 </Window>
