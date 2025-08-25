@@ -14,16 +14,9 @@ public class Guess : Word
     public Guess(string word)
         : base(word)
     {
-        if (word.Length != 5)
+        for (int i = 0; i < word.Length; i++)
         {
-            throw new ArgumentException($"\"{word}\" is not valid. Words must be 5 letters.");
-        }
-
-        char[] letters = WordString.ToCharArray();
-
-        for (int i = 0; i < letters.Length; i++)
-        {
-            Letters[i] = new Letter(letters[i]);
+            Letters[i] = new(word[i]);
         }
     }
 }

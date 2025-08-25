@@ -28,7 +28,7 @@ public class MainViewModel : ViewModelBase
         }
     }
 
-    WordManager WordManager { get; set; }
+    public WordManager WordManager { get; }
 
     public ObservableCollection<Guess> Guesses { get; set; }
 
@@ -44,6 +44,6 @@ public class MainViewModel : ViewModelBase
 
         RemoveGuessCommand = new RemoveGuessCommand(this);
 
-        WordManager = new WordManager();
+        WordManager = new();
     }
 }

@@ -35,11 +35,6 @@
             >
               <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Border>
-            <ControlTemplate.Triggers>
-              <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Opacity" Value="0.9" />
-              </Trigger>
-            </ControlTemplate.Triggers>
           </ControlTemplate>
         </Setter.Value>
       </Setter>
@@ -49,7 +44,7 @@
         Storyboard.TargetName="letterButtonScaleTransform"
         Storyboard.TargetProperty="(ScaleTransform.ScaleY)"
         To="1"
-        Duration="0:0:0.1"
+        Duration="0:0:0.05"
       >
         <DoubleAnimation.EasingFunction>
           <SineEase EasingMode="EaseOut" />
@@ -78,7 +73,7 @@
                 Storyboard.TargetName="letterButtonScaleTransform"
                 Storyboard.TargetProperty="(ScaleTransform.ScaleY)"
                 To="0"
-                Duration="0:0:0.1"
+                Duration="0:0:0.05"
               >
                 <DoubleAnimation.EasingFunction>
                   <SineEase EasingMode="EaseIn" />

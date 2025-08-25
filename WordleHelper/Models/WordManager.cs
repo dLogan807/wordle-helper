@@ -9,16 +9,16 @@ using System.Threading.Tasks;
 
 namespace WordleHelper.Models;
 
-internal class WordManager
+public class WordManager
 {
-    private readonly List<string> _words;
+    public readonly HashSet<Word> Words;
 
     public WordManager()
     {
-        _words = LoadWords();
+        Words = LoadWords();
     }
 
-    private static List<string> LoadWords()
+    private static HashSet<Word> LoadWords()
     {
         string filePath = "WordleHelper.Assets.words.txt";
         Debug.WriteLine($"Loading words from {filePath}");
@@ -26,21 +26,19 @@ internal class WordManager
         Assembly assembly = Assembly.GetExecutingAssembly();
         using Stream? stream =
             assembly.GetManifestResourceStream(filePath)
-            ?? throw new FileNotFoundException($"Could not find resource at {filePath}");
+            ?? throw new FileNotFoundException($"Could not find word list resource at {filePath}");
         using BufferedStream bs = new(stream);
         using StreamReader sr = new(bs);
 
-        List<string> wordList = [];
+        HashSet<Word> wordList = [];
 
         while (!sr.EndOfStream)
         {
             string? word = sr.ReadLine();
             if (string.IsNullOrEmpty(word) || word.Length > 5)
-            {
                 continue;
-            }
 
-            wordList.Add(word.Trim());
+            wordList.Add(new Word(word.Trim()));
         }
 
         Debug.WriteLine($"Loaded {wordList.Count} words!");

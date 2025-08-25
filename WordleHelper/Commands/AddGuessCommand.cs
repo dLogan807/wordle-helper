@@ -31,23 +31,22 @@ class AddGuessCommand : CommandBase
 
     private bool IsValidGuess()
     {
+        string guess = _mainViewModel.TypedGuess;
+
         if (
-            string.IsNullOrEmpty(_mainViewModel.TypedGuess)
-            || _mainViewModel.TypedGuess.Length != 5
+            string.IsNullOrEmpty(guess)
+            || guess.Length != 5
             || _mainViewModel.Guesses.Count > 5
-            || _mainViewModel.Guesses.Contains(new Guess(_mainViewModel.TypedGuess))
+            || !guess.All(char.IsLetter)
         )
-            return false;
-
-        char[] guessChars = _mainViewModel.TypedGuess.ToCharArray();
-
-        foreach (char c in guessChars)
         {
-            if (!char.IsLetter(c))
-                return false;
+            return false;
         }
 
-        return true;
+        //Check word is not already guessed and is in word list
+        Word word = new(guess);
+        return !_mainViewModel.Guesses.Contains(word)
+            && _mainViewModel.WordManager.Words.Contains(word);
     }
 
     //Add guess to collection and clear field

@@ -14,6 +14,11 @@ public class Word : IEquatable<Word>, IComparable<Guess>
 
     public Word(string word)
     {
+        if (word.Length != 5)
+        {
+            throw new ArgumentException($"\"{word}\" is not valid. Words must be 5 letters.");
+        }
+
         WordString = word;
 
         _hashCode = WordString.GetHashCode();
