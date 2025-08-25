@@ -17,34 +17,35 @@
     <converters:LetterColorConverter x:Key="letterColorConverter" />
     <Style x:Key="letterButtonStyle" TargetType="Button">
       <Setter Property="OverridesDefaultStyle" Value="True" />
-      <Setter
-        Property="Background"
-        Value="{Binding Path=Letter.Correctness, Converter={StaticResource letterColorConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}"
-      />
-      <Setter Property="Foreground" Value="White" />
-      <Setter Property="FontWeight" Value="Bold" />
-      <Setter Property="FontSize" Value="16" />
+      <Setter Property="Background" Value="Transparent" />
       <Setter Property="Template">
         <Setter.Value>
           <ControlTemplate TargetType="Button">
-            <Border
-              Padding="4,2"
-              Background="{TemplateBinding Background}"
-              BorderBrush="DarkGray"
-              BorderThickness="1"
-            >
+            <Border Background="{TemplateBinding Background}">
               <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Border>
           </ControlTemplate>
         </Setter.Value>
       </Setter>
     </Style>
-    <Storyboard x:Key="letterButtonShowStoryboard">
+    <Storyboard x:Key="hideLetterButtonStoryboard" Completed="LetterHideAnim_Completed">
+      <DoubleAnimation
+        Storyboard.TargetName="letterButtonScaleTransform"
+        Storyboard.TargetProperty="(ScaleTransform.ScaleY)"
+        To="0"
+        Duration="0:0:0.1"
+      >
+        <DoubleAnimation.EasingFunction>
+          <SineEase EasingMode="EaseIn" />
+        </DoubleAnimation.EasingFunction>
+      </DoubleAnimation>
+    </Storyboard>
+    <Storyboard x:Key="showLetterButtonStoryboard">
       <DoubleAnimation
         Storyboard.TargetName="letterButtonScaleTransform"
         Storyboard.TargetProperty="(ScaleTransform.ScaleY)"
         To="1"
-        Duration="0:0:0.05"
+        Duration="0:0:0.1"
       >
         <DoubleAnimation.EasingFunction>
           <SineEase EasingMode="EaseOut" />
@@ -53,36 +54,29 @@
     </Storyboard>
   </UserControl.Resources>
   <Grid x:Name="LayoutRoot" DataContext="{Binding ElementName=parent}">
-    <Button
-      x:Name="LetterButton"
-      Width="30"
-      Height="30"
-      CommandParameter="{Binding Path=Letter}"
-      Content="{Binding Path=Letter.Value}"
-      Style="{StaticResource letterButtonStyle}"
-    >
-      <Button.RenderTransform>
-        <ScaleTransform x:Name="letterButtonScaleTransform" CenterY="15" ScaleX="1" ScaleY="1" />
-      </Button.RenderTransform>
+    <Button x:Name="LetterButton" Width="30" Height="30" Style="{StaticResource letterButtonStyle}">
       <Button.Triggers>
         <EventTrigger RoutedEvent="Button.Click">
-          <BeginStoryboard x:Name="LetterButtonHideStoryboard">
-            <Storyboard>
-              <DoubleAnimation
-                Completed="LetterHideAnim_Completed"
-                Storyboard.TargetName="letterButtonScaleTransform"
-                Storyboard.TargetProperty="(ScaleTransform.ScaleY)"
-                To="0"
-                Duration="0:0:0.05"
-              >
-                <DoubleAnimation.EasingFunction>
-                  <SineEase EasingMode="EaseIn" />
-                </DoubleAnimation.EasingFunction>
-              </DoubleAnimation>
-            </Storyboard>
-          </BeginStoryboard>
+          <BeginStoryboard Storyboard="{StaticResource hideLetterButtonStoryboard}" />
         </EventTrigger>
       </Button.Triggers>
+      <Border
+        Width="30"
+        Height="30"
+        Background="{Binding Path=Letter.Correctness, Converter={StaticResource letterColorConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}"
+      >
+        <Border.RenderTransform>
+          <ScaleTransform x:Name="letterButtonScaleTransform" CenterY="15" ScaleX="1" ScaleY="1" />
+        </Border.RenderTransform>
+        <TextBlock
+          VerticalAlignment="Center"
+          FontSize="16"
+          FontWeight="Bold"
+          Foreground="White"
+          Text="{Binding Path=Letter.Value}"
+          TextAlignment="Center"
+        />
+      </Border>
     </Button>
   </Grid>
 </UserControl>

@@ -37,9 +37,10 @@ public partial class LetterButtonUserControl : UserControl
     public LetterButtonUserControl()
     {
         InitializeComponent();
-        _showLetterStoryboard = (Storyboard)FindResource("letterButtonShowStoryboard");
+        _showLetterStoryboard = (Storyboard)FindResource("showLetterButtonStoryboard");
     }
 
+    //Switch letter colour when hidden (halfway through animation)
     private void LetterHideAnim_Completed(object sender, EventArgs e)
     {
         Letter.CycleLetterCorrectness();
