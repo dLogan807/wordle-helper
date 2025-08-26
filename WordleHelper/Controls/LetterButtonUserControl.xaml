@@ -15,19 +15,6 @@
 >
   <UserControl.Resources>
     <converters:LetterColorConverter x:Key="letterColorConverter" />
-    <Style x:Key="letterButtonStyle" TargetType="Button">
-      <Setter Property="OverridesDefaultStyle" Value="True" />
-      <Setter Property="Background" Value="Transparent" />
-      <Setter Property="Template">
-        <Setter.Value>
-          <ControlTemplate TargetType="Button">
-            <Border Background="{TemplateBinding Background}">
-              <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-            </Border>
-          </ControlTemplate>
-        </Setter.Value>
-      </Setter>
-    </Style>
     <Storyboard x:Key="hideLetterButtonStoryboard" Completed="LetterHideAnim_Completed">
       <DoubleAnimation
         Storyboard.TargetName="letterButtonScaleTransform"
@@ -54,7 +41,7 @@
     </Storyboard>
   </UserControl.Resources>
   <Grid x:Name="LayoutRoot" DataContext="{Binding ElementName=parent}">
-    <Button x:Name="LetterButton" Width="30" Height="30" Style="{StaticResource letterButtonStyle}">
+    <Button x:Name="LetterButton" Width="30" Height="30" Style="{StaticResource BaseButton}">
       <Button.Triggers>
         <EventTrigger RoutedEvent="Button.Click">
           <BeginStoryboard Storyboard="{StaticResource hideLetterButtonStoryboard}" />

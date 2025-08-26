@@ -17,6 +17,17 @@
   WindowStartupLocation="CenterScreen"
   mc:Ignorable="d"
 >
+  <Window.Resources>
+    <!--  Delete button definition (extending base)  -->
+    <Style x:Key="DeleteButton" BasedOn="{StaticResource BaseButton}" TargetType="Button">
+      <Setter Property="FontSize" Value="14" />
+      <Style.Resources>
+        <Style TargetType="Border">
+          <Setter Property="CornerRadius" Value="4" />
+        </Style>
+      </Style.Resources>
+    </Style>
+  </Window.Resources>
   <Grid>
     <Border Grid.ColumnSpan="2" Background="#121213" BorderBrush="#363636" BorderThickness="5" />
     <Grid Grid.ColumnSpan="2" Margin="15">
@@ -45,6 +56,7 @@
           VerticalContentAlignment="Center"
           Command="{Binding AddGuessCommand}"
           Content="Add"
+          Style="{StaticResource ExecuteButton}"
         />
       </DockPanel>
       <ItemsControl Grid.Row="1" Grid.Column="0" Padding="5" ItemsSource="{Binding Guesses}">
@@ -58,19 +70,27 @@
               <controls:LetterButtonUserControl Margin="0,0,10,0" Letter="{Binding Letters[4]}" />
               <Button
                 Width="50"
-                Height="20"
-                HorizontalAlignment="Right"
-                Background="Red"
+                Background="#e03131"
                 Command="{Binding Path=DataContext.RemoveGuessCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                 CommandParameter="{Binding}"
-                Content="Remove"
+                Content=""
+                FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets"
+                FontWeight="Bold"
                 Foreground="White"
+                Style="{StaticResource DeleteButton}"
               />
             </DockPanel>
           </DataTemplate>
         </ItemsControl.ItemTemplate>
       </ItemsControl>
-      <Button Grid.Column="1" Content="Get Results" />
+      <Button
+        Grid.Column="1"
+        Content="Get Results"
+        FontWeight="Bold"
+        Foreground="White"
+        IsEnabled="False"
+        Style="{StaticResource ExecuteButton}"
+      />
       <ListView Grid.Row="1" Grid.Column="1" Background="#232323" />
     </Grid>
   </Grid>

@@ -7,8 +7,113 @@
 >
   <Application.Resources>
     <ResourceDictionary>
-      <Style TargetType="DataGridCell">
-        <Setter Property="TextBlock.TextAlignment" Value="Center" />
+      <!--  Base button definition  -->
+      <Style x:Key="BaseButton" TargetType="Button">
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate TargetType="Button">
+              <Border Background="{TemplateBinding Background}">
+                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+              </Border>
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+          <Trigger Property="IsEnabled" Value="False">
+            <Trigger.EnterActions>
+              <BeginStoryboard>
+                <Storyboard>
+                  <DoubleAnimation
+                    Storyboard.TargetProperty="Opacity"
+                    To="0.5"
+                    Duration="0:0:0.1"
+                  />
+                </Storyboard>
+              </BeginStoryboard>
+            </Trigger.EnterActions>
+            <Trigger.ExitActions>
+              <BeginStoryboard>
+                <Storyboard>
+                  <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.1" />
+                </Storyboard>
+              </BeginStoryboard>
+            </Trigger.ExitActions>
+          </Trigger>
+          <Trigger Property="IsMouseOver" Value="True">
+            <Trigger.EnterActions>
+              <BeginStoryboard>
+                <Storyboard>
+                  <DoubleAnimation
+                    Storyboard.TargetProperty="Opacity"
+                    To="0.9"
+                    Duration="0:0:0.05"
+                  />
+                </Storyboard>
+              </BeginStoryboard>
+            </Trigger.EnterActions>
+            <Trigger.ExitActions>
+              <BeginStoryboard>
+                <Storyboard>
+                  <DoubleAnimation
+                    FillBehavior="Stop"
+                    Storyboard.TargetProperty="Opacity"
+                    To="1"
+                    Duration="0:0:0.05"
+                  />
+                </Storyboard>
+              </BeginStoryboard>
+            </Trigger.ExitActions>
+          </Trigger>
+        </Style.Triggers>
+      </Style>
+      <!--  Button for executing a regular action  -->
+      <Style x:Key="ExecuteButton" BasedOn="{StaticResource BaseButton}" TargetType="Button">
+        <Setter Property="Foreground" Value="White" />
+        <Style.Resources>
+          <Style TargetType="Border">
+            <Setter Property="CornerRadius" Value="4" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="BorderBrush" Value="LightGray" />
+          </Style>
+        </Style.Resources>
+        <Style.Triggers>
+          <Trigger Property="IsEnabled" Value="True">
+            <Trigger.EnterActions>
+              <BeginStoryboard>
+                <Storyboard>
+                  <ColorAnimation
+                    Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
+                    To="LightGray"
+                    Duration="0:0:0.05"
+                  />
+                  <ColorAnimation
+                    Storyboard.TargetProperty="(Button.Foreground).(SolidColorBrush.Color)"
+                    To="Black"
+                    Duration="0:0:0.05"
+                  />
+                </Storyboard>
+              </BeginStoryboard>
+            </Trigger.EnterActions>
+            <Trigger.ExitActions>
+              <BeginStoryboard>
+                <Storyboard>
+                  <ColorAnimation
+                    Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
+                    To="Black"
+                    Duration="0:0:0.05"
+                  />
+                  <ColorAnimation
+                    Storyboard.TargetProperty="(Button.Foreground).(SolidColorBrush.Color)"
+                    To="White"
+                    Duration="0:0:0.05"
+                  />
+                </Storyboard>
+              </BeginStoryboard>
+            </Trigger.ExitActions>
+          </Trigger>
+        </Style.Triggers>
       </Style>
     </ResourceDictionary>
   </Application.Resources>
