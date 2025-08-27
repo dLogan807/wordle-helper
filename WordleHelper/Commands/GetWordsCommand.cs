@@ -38,35 +38,78 @@ class GetWordsCommand : CommandBase
 
     private static string GenerateRegex(ObservableCollection<Guess> guesses)
     {
-        //1. Must contain char at position
-        //2. Must contain char somewhere
-        //3. Must not contain char
-        string mustIncludeAtIndex = string.Empty;
+        string[] correctLetterRegex = new string[5];
         int lastCorrectLetterIndex = -1;
 
-        foreach (Guess guess in guesses)
+        string wrongPosLetterRegex = string.Empty;
+
+        HashSet<char> incorrectLetters = [];
+
+        for (int letterIndex = 0; letterIndex < guesses[0].Letters.Length; letterIndex++)
         {
-            Letter[] letters = guess.Letters;
-
-            for (int i = 0; i < letters.Length; i++)
+            foreach (Guess guess in guesses)
             {
-                Letter letter = letters[i];
+                Letter letter = guess.Letters[letterIndex];
 
-                //Letter MUST be a index
-                if (letter.Correctness == LetterCorrectness.Correct)
+                if (
+                    letter.Correctness == LetterCorrectness.Correct
+                    && string.IsNullOrEmpty(correctLetterRegex[letterIndex])
+                )
                 {
-                    mustIncludeAtIndex += GetCorrectLettersRegex(
-                        i,
+                    correctLetterRegex[letterIndex] += GetCorrectLettersRegex(
+                        letterIndex,
                         letter.Value,
                         lastCorrectLetterIndex
                     );
 
-                    lastCorrectLetterIndex = i;
+                    lastCorrectLetterIndex = letterIndex;
+                }
+                else if (letter.Correctness == LetterCorrectness.AdjustPostion) { }
+                else if (letter.Correctness == LetterCorrectness.NotPresent)
+                {
+                    incorrectLetters.Add(letter.Value);
                 }
             }
         }
 
-        return "/" + mustIncludeAtIndex;
+        return "/"
+            + GetWrongLettersRegex(incorrectLetters)
+            + GetStringArrayConcat(correctLetterRegex);
+    }
+
+    private static string GetWrongLettersRegex(HashSet<char> letters)
+    {
+        if (letters.Count == 0)
+        {
+            return string.Empty;
+        }
+
+        StringBuilder sb = new("(?!");
+        foreach (char letter in letters)
+        {
+            if (sb.Length == 3)
+            {
+                sb.Append(letter);
+            }
+            else
+            {
+                sb.Append("|" + letter);
+            }
+        }
+        sb.Append(')');
+
+        return sb.ToString();
+    }
+
+    private static string GetStringArrayConcat(string[] strings)
+    {
+        StringBuilder sb = new();
+        foreach (string s in strings)
+        {
+            sb.Append(s);
+        }
+
+        return sb.ToString();
     }
 
     //Return regex matching letters in correct positions
