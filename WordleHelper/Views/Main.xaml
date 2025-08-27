@@ -61,6 +61,7 @@
           VerticalContentAlignment="Center"
           Command="{Binding AddGuessCommand}"
           Content="Add"
+          FontWeight="Bold"
           Style="{StaticResource ExecuteButton}"
         />
       </DockPanel>
@@ -90,10 +91,11 @@
       </ItemsControl>
       <Button
         Grid.Column="1"
-        Content="Get Results"
+        Margin="0,9"
+        Command="{Binding GetWordsCommand}"
+        Content="Get Words"
         FontWeight="Bold"
         Foreground="White"
-        IsEnabled="False"
         Style="{StaticResource ExecuteButton}"
       />
       <ListView Grid.Row="1" Grid.Column="1" Background="#232323" />
