@@ -42,7 +42,7 @@ class GetWordsCommand : CommandBase
         //2. Must contain char somewhere
         //3. Must not contain char
         string mustIncludeAtIndex = string.Empty;
-        int lastMustIncIndex = -1;
+        int lastCorrectLetterIndex = -1;
 
         foreach (Guess guess in guesses)
         {
@@ -55,13 +55,13 @@ class GetWordsCommand : CommandBase
                 //Letter MUST be a index
                 if (letter.Correctness == LetterCorrectness.Correct)
                 {
-                    mustIncludeAtIndex += GetMustIncludeAtIndexRegex(
+                    mustIncludeAtIndex += GetCorrectLettersRegex(
                         i,
                         letter.Value,
-                        lastMustIncIndex
+                        lastCorrectLetterIndex
                     );
 
-                    lastMustIncIndex = i;
+                    lastCorrectLetterIndex = i;
                 }
             }
         }
@@ -69,37 +69,23 @@ class GetWordsCommand : CommandBase
         return "/" + mustIncludeAtIndex;
     }
 
-    private static string GetMustIncludeAtIndexRegex(int letterIndex, char letter, int lastIndex)
+    //Return regex matching letters in correct positions
+    private static string GetCorrectLettersRegex(int letterIndex, char letter, int lastIndex)
     {
-        //Shouldn't {0} always be at the start??????
         string regex = string.Empty;
-
         int charsFromLastLetter = letterIndex - lastIndex - 1;
 
-        //No previously included letters
-        if (lastIndex == -1)
+        if (letterIndex == 0 || charsFromLastLetter == 0)
         {
-            //Not beginning of word
-            if (letterIndex > 0)
-            {
-                regex = "^.{" + (letterIndex) + "}" + letter;
-            }
-            else
-            {
-                regex += letter;
-            }
+            regex += letter;
+        }
+        else if (charsFromLastLetter == 1)
+        {
+            regex = "." + letter;
         }
         else
         {
-            //If this letter directly follows last must-include letter
-            if (charsFromLastLetter == 0)
-            {
-                regex += letter;
-            }
-            else
-            {
-                regex = ".{" + (charsFromLastLetter) + "}" + letter;
-            }
+            regex = ".{" + (charsFromLastLetter) + "}" + letter;
         }
 
         return regex;
