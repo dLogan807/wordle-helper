@@ -21,7 +21,6 @@ class GetWordsCommand : CommandBase
     {
         _mainViewModel = mainViewModel;
 
-        _mainViewModel.PropertyChanged += OnViewModelPropertyChanged;
         _mainViewModel.Guesses.CollectionChanged += OnViewModelGuessesChanged;
     }
 
@@ -32,16 +31,24 @@ class GetWordsCommand : CommandBase
 
     public override void Execute(object? parameter)
     {
-        string matchExpression = GenerateRegex(_mainViewModel.Guesses);
-        Debug.WriteLine(matchExpression);
+        Regex regex = GenerateRegex(_mainViewModel.Guesses);
+        _mainViewModel.Results.Clear();
+
+        foreach (Word word in _mainViewModel.WordManager.Words)
+        {
+            if (regex.IsMatch(word.WordString))
+            {
+                _mainViewModel.Results.Add(word);
+            }
+        }
     }
 
-    private static string GenerateRegex(ObservableCollection<Guess> guesses)
+    private static Regex GenerateRegex(ObservableCollection<Guess> guesses)
     {
         string[] correctLetterRegex = new string[5];
         int lastCorrectLetterIndex = -1;
 
-        string wrongPosLetterRegex = string.Empty;
+        HashSet<char> wrongPosLetters = [];
 
         HashSet<char> incorrectLetters = [];
 
@@ -58,45 +65,64 @@ class GetWordsCommand : CommandBase
                 {
                     correctLetterRegex[letterIndex] += GetCorrectLettersRegex(
                         letterIndex,
-                        letter.Value,
+                        char.ToLower(letter.Value),
                         lastCorrectLetterIndex
                     );
 
                     lastCorrectLetterIndex = letterIndex;
                 }
-                else if (letter.Correctness == LetterCorrectness.AdjustPostion) { }
+                else if (letter.Correctness == LetterCorrectness.AdjustPostion)
+                {
+                    wrongPosLetters.Add(char.ToLower(letter.Value));
+                }
                 else if (letter.Correctness == LetterCorrectness.NotPresent)
                 {
-                    incorrectLetters.Add(letter.Value);
+                    incorrectLetters.Add(char.ToLower(letter.Value));
                 }
             }
         }
 
-        return "/"
-            + GetWrongLettersRegex(incorrectLetters)
-            + GetStringArrayConcat(correctLetterRegex);
+        //^(?=^h.{2}l)(?=^(?:(?![456]).)*$).*$
+        //^(?=^h.{2}l)(?=^(?:(?![abc]).)*$)(?=.*f)(?=.*z).*$
+        //Add (^(?!a).{0}) to check char is not at index
+        string pattern =
+            @"^(?=^"
+            + GetStringArrayConcat(correctLetterRegex)
+            + ")"
+            + GetLettersRegex(
+                "(?=^(?:(?![",
+                "]).)*$)",
+                string.Empty,
+                string.Empty,
+                incorrectLetters
+            )
+            + GetLettersRegex(string.Empty, string.Empty, "(?=.*", ")", wrongPosLetters)
+            + ".*$";
+
+        Debug.WriteLine(pattern);
+
+        return new Regex(pattern);
     }
 
-    private static string GetWrongLettersRegex(HashSet<char> letters)
+    private static string GetLettersRegex(
+        string start,
+        string end,
+        string letterStart,
+        string letterEnd,
+        HashSet<char> letters
+    )
     {
         if (letters.Count == 0)
         {
             return string.Empty;
         }
 
-        StringBuilder sb = new("(?!");
+        StringBuilder sb = new(start);
         foreach (char letter in letters)
         {
-            if (sb.Length == 3)
-            {
-                sb.Append(letter);
-            }
-            else
-            {
-                sb.Append("|" + letter);
-            }
+            sb.Append(letterStart + letter + letterEnd);
         }
-        sb.Append(')');
+        sb.Append(end);
 
         return sb.ToString();
     }
@@ -104,6 +130,7 @@ class GetWordsCommand : CommandBase
     private static string GetStringArrayConcat(string[] strings)
     {
         StringBuilder sb = new();
+
         foreach (string s in strings)
         {
             sb.Append(s);
@@ -132,14 +159,6 @@ class GetWordsCommand : CommandBase
         }
 
         return regex;
-    }
-
-    private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName == nameof(_mainViewModel.Guesses.Count))
-        {
-            OnCanExecuteChanged();
-        }
     }
 
     private void OnViewModelGuessesChanged(object? sender, NotifyCollectionChangedEventArgs e)

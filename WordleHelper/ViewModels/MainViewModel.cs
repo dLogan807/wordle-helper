@@ -32,6 +32,8 @@ public class MainViewModel : ViewModelBase
 
     public ObservableCollection<Guess> Guesses { get; set; }
 
+    public ObservableCollection<Word> Results { get; set; }
+
     public CommandBase AddGuessCommand { get; set; }
 
     public CommandBase RemoveGuessCommand { get; set; }
@@ -41,6 +43,8 @@ public class MainViewModel : ViewModelBase
     public MainViewModel()
     {
         Guesses = [];
+
+        Results = [];
 
         AddGuessCommand = new AddGuessCommand(this);
 
