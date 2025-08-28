@@ -65,7 +65,7 @@
           Style="{StaticResource ExecuteButton}"
         />
       </DockPanel>
-      <ItemsControl Grid.Row="1" Grid.Column="0" Padding="5" ItemsSource="{Binding Guesses}">
+      <ItemsControl Grid.Row="1" Grid.Column="0" Padding="5" ItemsSource="{Binding Model.Guesses}">
         <ItemsControl.ItemTemplate>
           <DataTemplate>
             <DockPanel Margin="0,0,0,10">
@@ -102,7 +102,7 @@
         <ItemsControl
           Padding="5,2"
           Background="#232323"
-          ItemsSource="{Binding Results}"
+          ItemsSource="{Binding Model.Results}"
           Visibility="Visible"
         >
           <ItemsControl.ItemTemplate>

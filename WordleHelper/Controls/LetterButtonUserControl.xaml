@@ -60,7 +60,7 @@
           FontSize="16"
           FontWeight="Bold"
           Foreground="White"
-          Text="{Binding Path=Letter.Value}"
+          Text="{Binding Path=Letter.ValueUpper}"
           TextAlignment="Center"
         />
       </Border>

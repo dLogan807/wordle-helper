@@ -18,11 +18,11 @@ class RemoveGuessCommand(MainViewModel mainViewModel) : CommandBase
 
     public override void Execute(object? parameter)
     {
-        if (parameter == null || _mainViewModel.Guesses.Count == 0)
+        if (parameter == null || _mainViewModel.Model.Guesses.Count == 0)
             return;
 
         Guess guess = (Guess)parameter;
 
-        _mainViewModel.Guesses.Remove(guess);
+        _mainViewModel.Model.Guesses.Remove(guess);
     }
 }
