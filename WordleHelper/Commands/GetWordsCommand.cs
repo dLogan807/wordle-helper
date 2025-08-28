@@ -46,6 +46,7 @@ class GetWordsCommand : CommandBase
     private static Regex GenerateRegex(ObservableCollection<Guess> guesses)
     {
         string[] correctLetterRegex = new string[5];
+        HashSet<char> correctLetters = [];
         int lastCorrectLetterIndex = -1;
 
         HashSet<char> wrongPosLetters = [];
@@ -68,10 +69,14 @@ class GetWordsCommand : CommandBase
                         char.ToLower(letter.Value),
                         lastCorrectLetterIndex
                     );
+                    correctLetters.Add(letter.Value);
 
                     lastCorrectLetterIndex = letterIndex;
                 }
-                else if (letter.Correctness == LetterCorrectness.AdjustPostion)
+                else if (
+                    letter.Correctness == LetterCorrectness.AdjustPostion
+                    && !correctLetters.Contains(letter.Value)
+                )
                 {
                     wrongPosLetters.Add(char.ToLower(letter.Value));
                 }
@@ -99,9 +104,9 @@ class GetWordsCommand : CommandBase
             + GetLettersRegex(string.Empty, string.Empty, "(?=.*", ")", wrongPosLetters)
             + ".*$";
 
-        Debug.WriteLine(pattern);
+        Debug.WriteLine("Generated regex: " + pattern);
 
-        return new Regex(pattern);
+        return new Regex(pattern, RegexOptions.Compiled);
     }
 
     private static string GetLettersRegex(

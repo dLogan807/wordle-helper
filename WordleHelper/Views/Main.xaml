@@ -98,20 +98,20 @@
         Foreground="White"
         Style="{StaticResource ExecuteButton}"
       />
-      <ItemsControl
-        Grid.Row="1"
-        Grid.Column="1"
-        Padding="5,2"
-        Background="#232323"
-        ItemsSource="{Binding Results}"
-        Visibility="Visible"
-      >
-        <ItemsControl.ItemTemplate>
-          <DataTemplate>
-            <TextBlock FontSize="20" Foreground="White" Text="{Binding WordString}" />
-          </DataTemplate>
-        </ItemsControl.ItemTemplate>
-      </ItemsControl>
+      <ScrollViewer Grid.Row="1" Grid.Column="1" VerticalScrollBarVisibility="Auto">
+        <ItemsControl
+          Padding="5,2"
+          Background="#232323"
+          ItemsSource="{Binding Results}"
+          Visibility="Visible"
+        >
+          <ItemsControl.ItemTemplate>
+            <DataTemplate>
+              <TextBlock FontSize="20" Foreground="White" Text="{Binding WordString}" />
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </ScrollViewer>
     </Grid>
   </Grid>
 </Window>
