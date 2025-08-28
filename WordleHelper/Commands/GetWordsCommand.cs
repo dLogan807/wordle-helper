@@ -50,6 +50,7 @@ class GetWordsCommand : CommandBase
         int lastCorrectLetterIndex = -1;
 
         HashSet<char> wrongPosLetters = [];
+        HashSet<char>[] wrongPosLettersIndexBlacklist = new HashSet<char>[5];
 
         HashSet<char> incorrectLetters = [];
 
@@ -58,6 +59,7 @@ class GetWordsCommand : CommandBase
             foreach (Guess guess in guesses)
             {
                 Letter letter = guess.Letters[letterIndex];
+                char letterValue = char.ToLower(letter.Value);
 
                 if (
                     letter.Correctness == LetterCorrectness.Correct
@@ -66,30 +68,42 @@ class GetWordsCommand : CommandBase
                 {
                     correctLetterRegex[letterIndex] += GetCorrectLettersRegex(
                         letterIndex,
-                        char.ToLower(letter.Value),
+                        letterValue,
                         lastCorrectLetterIndex
                     );
-                    correctLetters.Add(letter.Value);
+                    correctLetters.Add(letterValue);
 
                     lastCorrectLetterIndex = letterIndex;
+
+                    incorrectLetters.Remove(letterValue);
                 }
                 else if (
                     letter.Correctness == LetterCorrectness.AdjustPostion
-                    && !correctLetters.Contains(letter.Value)
+                    && !correctLetters.Contains(letterValue)
                 )
                 {
-                    wrongPosLetters.Add(char.ToLower(letter.Value));
+                    if (wrongPosLettersIndexBlacklist[letterIndex] == null)
+                    {
+                        wrongPosLettersIndexBlacklist[letterIndex] = [];
+                    }
+
+                    wrongPosLettersIndexBlacklist[letterIndex].Add(letterValue);
+                    wrongPosLetters.Add(letterValue);
                 }
-                else if (letter.Correctness == LetterCorrectness.NotPresent)
+                else if (
+                    letter.Correctness == LetterCorrectness.NotPresent
+                    && !correctLetters.Contains(letterValue)
+                )
                 {
-                    incorrectLetters.Add(char.ToLower(letter.Value));
+                    incorrectLetters.Add(letterValue);
                 }
             }
         }
 
-        //^(?=^h.{2}l)(?=^(?:(?![456]).)*$).*$
-        //^(?=^h.{2}l)(?=^(?:(?![abc]).)*$)(?=.*f)(?=.*z).*$
-        //Add (^(?!a).{0}) to check char is not at index
+        string posBlacklistPattern =
+            wrongPosLetters.Count > 0
+                ? GetIndexBlacklistRegex(wrongPosLettersIndexBlacklist)
+                : string.Empty;
         string pattern =
             @"^(?=^"
             + GetStringArrayConcat(correctLetterRegex)
@@ -102,11 +116,52 @@ class GetWordsCommand : CommandBase
                 incorrectLetters
             )
             + GetLettersRegex(string.Empty, string.Empty, "(?=.*", ")", wrongPosLetters)
+            + posBlacklistPattern
             + ".*$";
 
         Debug.WriteLine("Generated regex: " + pattern);
 
         return new Regex(pattern, RegexOptions.Compiled);
+    }
+
+    private static string GetIndexBlacklistRegex(HashSet<char>[] blacklist)
+    {
+        //(^(?!(^.{index1}[letter blacklist]|^.{index2}[letter blacklist])).)
+        if (blacklist == null)
+        {
+            return string.Empty;
+        }
+
+        StringBuilder regex = new();
+
+        regex.Append("(^(?!(");
+        int baseLength = regex.Length;
+
+        for (int i = 0; i < blacklist.Length; i++)
+        {
+            if (blacklist[i] == null || blacklist[i].Count == 0)
+            {
+                continue;
+            }
+
+            if (regex.Length > baseLength)
+            {
+                regex.Append('|');
+            }
+
+            regex.Append("^.{" + i + "}[");
+
+            foreach (char letter in blacklist[i])
+            {
+                regex.Append(letter);
+            }
+
+            regex.Append(']');
+        }
+
+        regex.Append(")).)");
+
+        return regex.ToString();
     }
 
     private static string GetLettersRegex(
@@ -122,26 +177,26 @@ class GetWordsCommand : CommandBase
             return string.Empty;
         }
 
-        StringBuilder sb = new(start);
+        StringBuilder regex = new(start);
         foreach (char letter in letters)
         {
-            sb.Append(letterStart + letter + letterEnd);
+            regex.Append(letterStart + letter + letterEnd);
         }
-        sb.Append(end);
+        regex.Append(end);
 
-        return sb.ToString();
+        return regex.ToString();
     }
 
     private static string GetStringArrayConcat(string[] strings)
     {
-        StringBuilder sb = new();
+        StringBuilder regex = new();
 
         foreach (string s in strings)
         {
-            sb.Append(s);
+            regex.Append(s);
         }
 
-        return sb.ToString();
+        return regex.ToString();
     }
 
     //Return regex matching letters in correct positions
