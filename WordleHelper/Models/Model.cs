@@ -17,12 +17,15 @@ public class Model
     public ObservableCollection<Guess> Guesses { get; set; }
     public ObservableCollection<Word> Results { get; set; }
 
+    private readonly WordRegexBuilder _wordRegexBuilder;
+
     public Model(string wordAssetPath, int wordLength, int maxGuesses)
     {
-        Guesses = [];
-        Results = [];
         _wordLength = wordLength;
         _maxGuesses = maxGuesses;
+        Guesses = [];
+        Results = [];
+        _wordRegexBuilder = new(_wordLength);
 
         Words = LoadWords(wordAssetPath);
     }
@@ -82,7 +85,7 @@ public class Model
     public void GenerateResults()
     {
         Results.Clear();
-        Regex regex = GenerateRegex(Guesses);
+        Regex regex = _wordRegexBuilder.GenerateRegex(Guesses);
 
         foreach (Word word in Words)
         {
@@ -91,187 +94,5 @@ public class Model
                 Results.Add(word);
             }
         }
-    }
-
-    private Regex GenerateRegex(ObservableCollection<Guess> guesses)
-    {
-        string[] correctLetterRegex = new string[_wordLength];
-        HashSet<char> correctLetters = [];
-        int prevCorrectLetterIndex = -1;
-
-        HashSet<char> adjustPosLetters = [];
-        HashSet<char>[] adjustPosLettersIndexBlacklist = new HashSet<char>[_wordLength];
-
-        HashSet<char> incorrectLetters = [];
-
-        for (int letterIndex = 0; letterIndex < _wordLength; letterIndex++)
-        {
-            foreach (Guess guess in guesses)
-            {
-                Letter letter = guess.Letters[letterIndex];
-                char letterValue = char.ToLower(letter.Value);
-
-                if (
-                    letter.Correctness == LetterCorrectness.Correct
-                    && string.IsNullOrEmpty(correctLetterRegex[letterIndex])
-                )
-                {
-                    correctLetterRegex[letterIndex] += GetCorrectLettersRegex(
-                        letterIndex,
-                        letterValue,
-                        prevCorrectLetterIndex
-                    );
-                    correctLetters.Add(letterValue);
-                    incorrectLetters.Remove(letterValue);
-
-                    prevCorrectLetterIndex = letterIndex;
-                }
-                else if (
-                    letter.Correctness == LetterCorrectness.AdjustPostion
-                    && !correctLetters.Contains(letterValue)
-                )
-                {
-                    if (adjustPosLettersIndexBlacklist[letterIndex] == null)
-                    {
-                        adjustPosLettersIndexBlacklist[letterIndex] = [];
-                    }
-
-                    adjustPosLettersIndexBlacklist[letterIndex].Add(letterValue);
-                    adjustPosLetters.Add(letterValue);
-                }
-                else if (
-                    letter.Correctness == LetterCorrectness.NotPresent
-                    && !correctLetters.Contains(letterValue)
-                )
-                {
-                    incorrectLetters.Add(letterValue);
-                }
-            }
-        }
-
-        string pattern =
-            @""
-            + GetStringArrayConcat(correctLetterRegex, "^(?=^", ")")
-            + GetLettersRegex(
-                incorrectLetters,
-                "(?=^(?:(?![",
-                "]).)*$)",
-                string.Empty,
-                string.Empty
-            )
-            + GetLettersRegex(adjustPosLetters, string.Empty, string.Empty, "(?=.*", ")")
-            + GetIndexBlacklistRegex(adjustPosLettersIndexBlacklist, "(^(?!(", ")).)")
-            + ".*$";
-
-        Debug.WriteLine("Generated regex: " + pattern);
-
-        return new Regex(pattern, RegexOptions.Compiled);
-    }
-
-    private static string WrapRegex(StringBuilder sb, string start, string end)
-    {
-        if (sb == null || sb.Length == 0)
-            return string.Empty;
-
-        sb.Insert(0, start);
-        sb.Append(end);
-
-        return sb.ToString();
-    }
-
-    //Regex of letters blacklisted from indexes
-    private static string GetIndexBlacklistRegex(
-        HashSet<char>[] blacklist,
-        string start,
-        string end
-    )
-    {
-        //Format: (^(?!(^.{index1}[letter blacklist]|^.{index2}[letter blacklist])).)
-        if (blacklist == null)
-        {
-            return string.Empty;
-        }
-
-        StringBuilder regex = new();
-
-        for (int i = 0; i < blacklist.Length; i++)
-        {
-            if (blacklist[i] == null || blacklist[i].Count == 0)
-            {
-                continue;
-            }
-
-            if (regex.Length > 0)
-            {
-                regex.Append('|');
-            }
-
-            regex.Append("^.{" + i + "}[");
-
-            foreach (char letter in blacklist[i])
-            {
-                regex.Append(letter);
-            }
-
-            regex.Append(']');
-        }
-
-        return WrapRegex(regex, start, end);
-    }
-
-    private static string GetLettersRegex(
-        HashSet<char> letters,
-        string start,
-        string end,
-        string letterStart,
-        string letterEnd
-    )
-    {
-        if (letters.Count == 0)
-        {
-            return string.Empty;
-        }
-
-        StringBuilder regex = new();
-        foreach (char letter in letters)
-        {
-            regex.Append(letterStart + letter + letterEnd);
-        }
-
-        return WrapRegex(regex, start, end);
-    }
-
-    private static string GetStringArrayConcat(string[] strings, string start, string end)
-    {
-        StringBuilder regex = new();
-
-        foreach (string s in strings)
-        {
-            regex.Append(s);
-        }
-
-        return WrapRegex(regex, start, end);
-    }
-
-    //Return regex matching letters in correct positions
-    private static string GetCorrectLettersRegex(int letterIndex, char letter, int prevIndex)
-    {
-        string regex = string.Empty;
-        int charsFromPrevLetter = letterIndex - prevIndex - 1;
-
-        if (letterIndex == 0 || charsFromPrevLetter == 0)
-        {
-            regex += letter;
-        }
-        else if (charsFromPrevLetter == 1)
-        {
-            regex = "." + letter;
-        }
-        else
-        {
-            regex = ".{" + (charsFromPrevLetter) + "}" + letter;
-        }
-
-        return regex;
     }
 }
