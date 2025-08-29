@@ -11,6 +11,7 @@ namespace WordleHelper.Models;
 public class Letter : INotifyPropertyChanged, IEquatable<Letter>
 {
     public char Value { get; }
+    public char ValueUpper { get; }
 
     LetterCorrectness _correctness;
 
@@ -28,7 +29,8 @@ public class Letter : INotifyPropertyChanged, IEquatable<Letter>
     {
         ValidateIsAlphabetical(value);
 
-        Value = char.ToUpper(value);
+        Value = value;
+        ValueUpper = char.ToUpper(value);
         Correctness = LetterCorrectness.NotPresent;
     }
 
@@ -37,6 +39,7 @@ public class Letter : INotifyPropertyChanged, IEquatable<Letter>
         ValidateIsAlphabetical(value);
 
         Value = value;
+        ValueUpper = char.ToUpper(value);
         Correctness = correctness;
     }
 

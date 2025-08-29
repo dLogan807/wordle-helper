@@ -21,32 +21,13 @@ class AddGuessCommand : CommandBase
         _mainViewModel = mainViewModel;
 
         _mainViewModel.PropertyChanged += OnViewModelPropertyChanged;
-        _mainViewModel.Guesses.CollectionChanged += OnViewModelGuessesChanged;
+        _mainViewModel.Model.Guesses.CollectionChanged += OnViewModelGuessesChanged;
     }
 
     public override bool CanExecute(object? parameter)
     {
-        return IsValidGuess() && base.CanExecute(parameter);
-    }
-
-    private bool IsValidGuess()
-    {
-        string guess = _mainViewModel.TypedGuess;
-
-        if (
-            string.IsNullOrEmpty(guess)
-            || guess.Length != 5
-            || _mainViewModel.Guesses.Count > 5
-            || !guess.All(char.IsLetter)
-        )
-        {
-            return false;
-        }
-
-        //Check word is not already guessed and is in word list
-        Word word = new(guess);
-        return !_mainViewModel.Guesses.Contains(word)
-            && _mainViewModel.WordManager.Words.Contains(word);
+        return _mainViewModel.Model.IsValidGuess(_mainViewModel.TypedGuess)
+            && base.CanExecute(parameter);
     }
 
     //Add guess to collection and clear field
@@ -54,7 +35,7 @@ class AddGuessCommand : CommandBase
     {
         Guess guess = new(_mainViewModel.TypedGuess);
 
-        _mainViewModel.Guesses.Add(guess);
+        _mainViewModel.Model.Guesses.Add(guess);
         _mainViewModel.TypedGuess = "";
 
         OnCanExecuteChanged();

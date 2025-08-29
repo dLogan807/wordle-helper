@@ -28,11 +28,7 @@ public class MainViewModel : ViewModelBase
         }
     }
 
-    public WordManager WordManager { get; }
-
-    public ObservableCollection<Guess> Guesses { get; set; }
-
-    public ObservableCollection<Word> Results { get; set; }
+    public Model Model { get; set; }
 
     public CommandBase AddGuessCommand { get; set; }
 
@@ -42,16 +38,12 @@ public class MainViewModel : ViewModelBase
 
     public MainViewModel()
     {
-        Guesses = [];
-
-        Results = [];
+        Model = new("WordleHelper.Assets.words.txt", 5, 6);
 
         AddGuessCommand = new AddGuessCommand(this);
 
         RemoveGuessCommand = new RemoveGuessCommand(this);
 
         GetWordsCommand = new GetWordsCommand(this);
-
-        WordManager = new();
     }
 }
