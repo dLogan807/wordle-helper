@@ -13,7 +13,7 @@ public class WordRegexBuilder(int wordLength)
 {
     public readonly int _wordLength = wordLength;
 
-    public Regex GenerateRegex(ObservableCollection<Guess> guesses)
+    public Regex GenerateRegex(ICollection<Guess> guesses)
     {
         string[] correctLetterRegex = new string[_wordLength];
         HashSet<char> correctLetters = [];
